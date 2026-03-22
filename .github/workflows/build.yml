@@ -1,21 +1,25 @@
-# ### ЗАПУСК МАШИНИ ЗБІРКИ APK ### #
+# ### РОБОЧИЙ ДВИГУН ЗБІРКИ APK ### #
 name: Build Android APK
+
 on:
   push:
     branches: [ main ]
   workflow_dispatch:
+
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+
       - name: Build with Buildozer
-        uses: ArtemShatalov/buildozer-action@v1
+        uses: Pozos/buildozer-action@v2
         with:
-          buildozer_version: master
           python_version: 3.11
+
       - name: Upload APK
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: my-app-apk
+          name: my-android-app
           path: bin/*.apk
