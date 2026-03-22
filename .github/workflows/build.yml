@@ -1,6 +1,5 @@
-# ### РОБОЧИЙ ДВИГУН ЗБІРКИ APK ### #
+# ### УЛЬТИМАТИВНИЙ ЗАПУСК ЗБІРКИ ### #
 name: Build Android APK
-
 on:
   push:
     branches: [ main ]
@@ -9,17 +8,22 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y git zip unzip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
+          python3 -m pip install --user --upgrade Cython==0.29.33 buildozer
+
       - name: Build with Buildozer
-        uses: Pozos/buildozer-action@v2
-        with:
-          python_version: 3.11
+        run: |
+          yes | buildozer android debug
+        continue-on-error: false
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: my-android-app
+          name: my-app-apk
           path: bin/*.apk
